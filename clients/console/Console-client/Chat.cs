@@ -22,8 +22,9 @@ namespace Console_client
             _nickName = Console.ReadLine();
         }
 
-
-
+        /// <summary>
+        /// Старт чата
+        /// </summary>
         public async Task Start()
         {
             ObservableCollection<string> collection = new ObservableCollection<string>();
@@ -39,32 +40,36 @@ namespace Console_client
                 foreach (var dataRaw in data)
                 {
                     var jsonEl = (JsonElement)dataRaw;
-                    var nickname = jsonEl.GetProperty("nickname").GetString();
-                    var message = jsonEl.GetProperty("message").GetString();
+                    var nickname = jsonEl
+                    .GetProperty("nickname")
+                    .GetString();
+                    var message = jsonEl
+                    .GetProperty("message")
+                    .GetString();
                     collection.Add($"{nickname}: {message}");
-                    //Console.WriteLine($"{nickname}: {message}");
                 }
             });
 
             _connection.On<string, string>("sendMessage", (message, user) =>
             {
                 collection.Add($"{user}: {message}");
-                //Console.WriteLine($"{user}: {message}");
             });
 
             await _connection.InvokeAsync("GetData");
 
         }
 
+        
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             foreach (string item in e.NewItems)
-            {
                 Console.WriteLine(item);
-            }
         }
 
 
+        /// <summary>
+        /// Чтение консоли
+        /// </summary>
         private void Reader()
         {
             Console.WriteLine("Для завершения напишите: /");
