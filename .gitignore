@@ -353,3 +353,4 @@ MigrationBackup/
 .ionide/
 server/WebApplication/.idea/.idea.WebApplication/riderModule.iml
 *.xml
+*.iml
